@@ -1,0 +1,39 @@
+version: '3.3'
+services:
+  mocksserver:
+    image: mocksserver/main
+    ports:
+      - "3100:3100"
+      - "3110:3110"
+    volumes:
+      - ./shared/server-mock/mocks:/input/mocks  # Mount the 'mocks' directory
+      - ./shared/server-mock/mocks.config.js:/input/mocks.config.js
+    environment:
+      - MOCKS_PATH=/input  
+    networks:
+      - challenge-net-goty-kubernates 
+    command: npm start
+
+  backend_bff:
+    image: gporras/goty-bsf:latest
+    ports:
+      - '5000:5000'
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - GAMES_HOST=http://mocksserver:3100
+    networks:
+      - challenge-net-goty-kubernates  
+  
+  goty-front:
+    image: gporras/goty-front:latest
+    ports:
+      - "4200:80"
+    environment:
+      - URL=http://localhost:5000 
+    networks:
+      - challenge-net-goty-kubernates
+
+
+networks:
+  challenge-net-goty-kubernates:
+    driver: bridge

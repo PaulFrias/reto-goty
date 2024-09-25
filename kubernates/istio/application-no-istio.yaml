@@ -1,0 +1,192 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mockserver
+  namespace: goty-pdn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mockserver
+  template:
+    metadata:
+      labels:
+        app: mockserver
+    spec:
+      containers:
+        - name: mockserver
+          image: mocksserver/main
+          ports:
+            - containerPort: 3100
+            - containerPort: 3200
+          volumeMounts:
+            - name: mocks
+              mountPath: /input/mocks
+            - name: mocks-config
+              mountPath: /input/mocks.config.js
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+      volumes:
+        - name: mocks
+          hostPath:
+            path: "./shared/server-mock/mocks"
+        - name: mocks-config
+          hostPath:
+            path: "./shared/server-mock/mocks.config.js"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-bff
+  namespace: goty-pdn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-bff
+  template:
+    metadata:
+      labels:
+        app: backend-bff
+    spec:
+      containers:
+        - name: backend-bff
+          image: gporras/goty-bsf:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: GAMES_HOST
+              value: "http://mockserver:3100"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goty-front
+  namespace: goty-pdn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goty-front
+  template:
+    metadata:
+      labels:
+        app: goty-front
+    spec:
+      containers:
+        - name: goty-front
+          image: gporras/goty-front:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: URL
+              value: "http://backend-bff:5000"
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-bff-solution
+  namespace: goty-pdn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-bff-solution
+  template:
+    metadata:
+      labels:
+        app: backend-bff-solution
+    spec:
+      containers:
+        - name: backend-bff-solution
+          image: polfrias/backend-bff-solution:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: GAMES_HOST
+              value: "http://mockserver:3100"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mockserver
+  namespace: goty-pdn
+spec:
+  selector:
+    app: mockserver
+  ports:
+    - protocol: TCP
+      port: 3100
+      targetPort: 3100
+    - protocol: TCP
+      port: 3200
+      targetPort: 3200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-bff
+  namespace: goty-pdn
+spec:
+  selector:
+    app: backend-bff
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: goty-front
+  namespace: goty-pdn
+spec:
+  selector:
+    app: goty-front
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-bff-solution
+  namespace: goty-pdn
+spec:
+  selector:
+    app: backend-bff-solution
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000

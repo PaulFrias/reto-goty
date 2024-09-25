@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "21e3db7a-5e99-46db-aae2-994caa75a9c9",
+		"name": "GOTY-PERFORMANCE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8026786",
+		"_collection_link": "https://orange-zodiac-82819.postman.co/workspace/EstudioLocal~d5eb4c1a-be4b-4e8b-ba91-52c360a11e8e/collection/8026786-21e3db7a-5e99-46db-aae2-994caa75a9c9?action=share&source=collection_link&creator=8026786"
+	},
+	"item": [
+		{
+			"name": "BFS",
+			"item": [
+				{
+					"name": "/goty/similars/{ID}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/goty/similars/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"goty",
+								"similars",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/goty/products",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/goty/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"goty",
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "/api/goty/products",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/goty/products",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"goty",
+										"products"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "724"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"cyberpunk\",\n        \"url\": \"https://www.somosxbox.com/wp-content/uploads/2022/02/cri%CC%81ticas-a-Cyberpunk-2077-next-gen.jpg\",\n        \"price\": 10\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Death Stranding\",\n        \"url\": \"https://assets-prd.ignimgs.com/2021/09/23/deathstrandingdirectorscut-review-blogroll-1632387467210.jpg\",\n        \"price\": 1000\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Smash Ultimate\",\n        \"url\": \"https://images.nintendolife.com/adc8dfcee7cd5/1280x720.jpg\",\n        \"price\": 2000\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Mario Kart\",\n        \"url\": \"https://www.pockettactics.com/wp-content/sites/pockettactics/2022/09/Mario-kart-tour-revenue-2-550x309.jpg\",\n        \"price\": 1500\n    },\n    {\n        \"id\": 5,\n        \"name\": \"The last of US\",\n        \"url\": \"https://www.hollywoodreporter.com/wp-content/uploads/2014/03/the_last_of_us.jpg?w=1024\",\n        \"price\": 200\n    }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "SIMILARS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/api/product/1/similars",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"product",
+						"1",
+						"similars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRODUCT",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/api/product/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"product",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRODUCTS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3100/api/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

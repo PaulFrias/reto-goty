@@ -1,0 +1,70 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: backend-bff-destination
+  namespace: goty-pdn
+spec:
+  host: backend-bff
+  subsets:
+    - name: v1
+      labels:
+        app: backend-bff
+    - name: v2
+      labels:
+        app: backend-bff-solution
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: backend-bff-canary
+  namespace: goty-pdn
+spec:
+  hosts:
+    - "backend-bff"
+  http:
+    - route:
+        - destination:
+            host: backend-bff
+            subset: v1
+          weight: 75
+        - destination:
+            host: backend-bff
+            subset: v2
+          weight: 25
+---
+# Este manifiesto es para el paso siguiente, con 75% v2 y 25% v1
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: backend-bff-canary-step2
+  namespace: goty-pdn
+spec:
+  hosts:
+    - "backend-bff"
+  http:
+    - route:
+        - destination:
+            host: backend-bff
+            subset: v1
+          weight: 25
+        - destination:
+            host: backend-bff
+            subset: v2
+          weight: 75
+---
+# Paso final, todo el tráfico va al v2 (backend-bff-solution)
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: backend-bff-final
+  namespace: goty-pdn
+spec:
+  hosts:
+    - "backend-bff"
+  http:
+    - route:
+        - destination:
+            host: backend-bff
+            subset: v2
+          weight: 100
